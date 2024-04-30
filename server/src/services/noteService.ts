@@ -8,6 +8,10 @@ export function createNote(body: Note): Promise<Note> {
   });
 }
 
+export function getNoteById(noteId: string): Promise<Note | null> {
+  return Note.findByPk(noteId);
+}
+
 export function deleteNoteById(noteId: string): Promise<number> {
   return Note.destroy({
     where: {

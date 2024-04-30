@@ -10,6 +10,20 @@ export async function createNote(req: Request, res: Response) {
   }
 }
 
+export async function getNoteById(req: Request<{ id: string }>, res: Response) {
+  try {
+    const note = await noteService.getNoteById(req.params.id);
+
+    if (!note) {
+      return res.status(400).send("note doesn't exist");
+    }
+
+    res.status(200).json(note);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
 export async function deleteNoteById(
   req: Request<{ id: string }>,
   res: Response
