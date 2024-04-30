@@ -1,12 +1,16 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+// TODO: remove as string workaround
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  process.env.DB_NAME as string,
+  process.env.DB_USER as string,
+  process.env.DB_PASSWORD as string,
   {
     dialect: 'postgres',
-    host: process.env.DB_HOST
+    host: process.env.DB_HOST as string
   }
 );
 
