@@ -24,6 +24,11 @@ app.listen(port, async () => {
   try {
     await sequelize.authenticate();
     SyncDBModels();
+
+    // TODO: find a better place for relation
+    Note.belongsTo(User, { foreignKey: 'userId' });
+    User.hasMany(Note);
+
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
