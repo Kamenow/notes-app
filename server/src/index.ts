@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import sequelize from './db/db';
 import UserRoutes from './routes/userRoutes';
+import AuthRoutes from './routes/authRoutes';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { SyncDBModels } from './helpers/db';
@@ -17,6 +18,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 app.use(bodyParser.json());
 app.use('/users', UserRoutes);
+app.use('/auth', AuthRoutes);
 
 app.listen(port, async () => {
   try {
