@@ -8,6 +8,10 @@ export function getUserById(id: number): Promise<User | null> {
   return User.findByPk(id);
 }
 
+export function getUserByEmail(email: string): Promise<User | null> {
+  return User.findOne({ where: { email } });
+}
+
 // export const getAllUsers= (userData: IUser) => {
 //   const newUser: IUser = new User(userData);
 //   return newUser.save();
