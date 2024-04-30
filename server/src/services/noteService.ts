@@ -8,3 +8,11 @@ export function createNote(body: Note): Promise<Note> {
   });
 }
 
+export function deleteNoteById(noteId: string): Promise<number> {
+  return Note.destroy({
+    where: {
+      id: noteId
+    }
+  });
+}
+
