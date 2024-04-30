@@ -20,3 +20,10 @@ export function deleteNoteById(noteId: string): Promise<number> {
   });
 }
 
+export function getAllNotesOfUser(userId: string): Promise<Note[]> {
+  return Note.findAll({
+    where: {
+      userId
+    }
+  });
+}

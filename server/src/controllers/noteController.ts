@@ -41,3 +41,15 @@ export async function deleteNoteById(
   }
 }
 
+export async function getAllNotesOfUser(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  try {
+    const notes = await noteService.getAllNotesOfUser(req.params.id);
+
+    res.status(200).send(notes);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
