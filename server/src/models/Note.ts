@@ -4,10 +4,9 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
-  ModelStatic
+  UUIDV4
 } from 'sequelize';
 import sequelize from '../db/db';
-import User from './User';
 
 class Note extends Model<InferAttributes<Note>, InferCreationAttributes<Note>> {
   declare id: CreationOptional<number>;
@@ -27,13 +26,13 @@ Note.init(
       allowNull: false
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false
     },
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: UUIDV4,
       unique: true,
       allowNull: false
     }
@@ -43,7 +42,5 @@ Note.init(
     modelName: 'Note'
   }
 );
-
-Note.belongsTo(User, { foreignKey: 'userId' });
 
 export default Note;

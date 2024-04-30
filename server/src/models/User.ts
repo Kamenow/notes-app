@@ -3,10 +3,10 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model
+  Model,
+  UUIDV4
 } from 'sequelize';
 import sequelize from '../db/db';
-import Note from './Note';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -26,16 +26,14 @@ User.init(
       allowNull: false
     },
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: UUIDV4,
       unique: true,
       allowNull: false
     }
   },
   { sequelize }
 );
-
-User.hasMany(Note);
 
 export default User;
