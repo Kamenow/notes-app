@@ -1,21 +1,19 @@
-import { DataTypes, Model } from 'sequelize';
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  ModelStatic
+} from 'sequelize';
 import sequelize from '../db/db';
 import User from './User';
 
-interface NoteAttributes {
-  id?: number;
-  title: string;
-  content: string;
-  userId: number;
-  createdAt: Date;
-  lastUpdated: Date;
-}
-
-class Note extends Model<NoteAttributes> {
-  public id!: number;
-  public title!: string;
-  public content!: string;
-  public userId!: number;
+class Note extends Model<InferAttributes<Note>, InferCreationAttributes<Note>> {
+  declare id: CreationOptional<number>;
+  declare title: string;
+  declare content: string;
+  declare userId: number;
 }
 
 Note.init(
@@ -32,19 +30,17 @@ Note.init(
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    createdAt: {
-      type: DataTypes.DATE,
+    id: {
+      type: DataTypes.NUMBER,
+      primaryKey: true,
+      autoIncrement: true,
+      unique: true,
       allowNull: false
-    },
-    lastUpdated: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   },
   {
     sequelize,
-    modelName: 'Note',
-    tableName: 'notes'
+    modelName: 'Note'
   }
 );
 

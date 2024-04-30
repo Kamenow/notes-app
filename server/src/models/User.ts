@@ -3,8 +3,7 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model,
-  Sequelize
+  Model
 } from 'sequelize';
 import sequelize from '../db/db';
 import Note from './Note';
@@ -36,5 +35,7 @@ User.init(
   },
   { sequelize }
 );
+
+User.hasMany(Note);
 
 export default User;
