@@ -42,3 +42,36 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+export async function login(req: Request, res: Response) {
+  const { email, password } = req.body;
+
+  try {
+    const userExists = await userService.getUserByEmail(email);
+
+    if (userExists === null) {
+      return res.status(400).send("User doesn't exist");
+    }
+
+    const passwordsMatch = await bcrypt.compare(password, userExists.password);
+
+    if (!passwordsMatch) {
+      return res.status(400).send('Wrong password');
+    }
+
+    if (!process.env.TOKEN_SECRET) {
+      return res.status(500).send('Something went wrong');
+    }
+
+    const token = jwt.sign(
+      { email: userExists.email, id: userExists.id },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: '1h'
+      }
+    );
+
+    res.json(token);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
