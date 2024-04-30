@@ -4,6 +4,7 @@ import sequelize from './db/db';
 import UserRoutes from './routes/userRoutes';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { SyncDBModels } from './helpers/db';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use('/users', UserRoutes);
 app.listen(port, async () => {
   try {
     await sequelize.authenticate();
+    SyncDBModels();
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
