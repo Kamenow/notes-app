@@ -3,9 +3,13 @@ import dotenv from 'dotenv';
 import sequelize from './db/db';
 import UserRoutes from './routes/userRoutes';
 import AuthRoutes from './routes/authRoutes';
+import NotesRoutes from './routes/notesRoute';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { SyncDBModels } from './helpers/db';
+import Note from './models/Note';
+import User from './models/User';
+import { Sequelize } from 'sequelize';
 
 dotenv.config();
 
@@ -18,6 +22,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 app.use(bodyParser.json());
 app.use('/users', UserRoutes);
+app.use('/notes', NotesRoutes);
 app.use('/auth', AuthRoutes);
 
 app.listen(port, async () => {
