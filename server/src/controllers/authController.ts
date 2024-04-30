@@ -9,9 +9,9 @@ export async function register(req: Request, res: Response) {
   const { email, password, rePassword } = req.body;
 
   try {
-    const userExists = await userService.getUserByEmail(email);
+    const existingUser = await userService.getUserByEmail(email);
 
-    if (userExists) {
+    if (existingUser) {
       return res.status(400).send('User already exists');
     }
 
@@ -46,13 +46,13 @@ export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
   try {
-    const userExists = await userService.getUserByEmail(email);
+    const user = await userService.getUserByEmail(email);
 
-    if (userExists === null) {
+    if (user === null) {
       return res.status(400).send("User doesn't exist");
     }
 
-    const passwordsMatch = await bcrypt.compare(password, userExists.password);
+    const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) {
       return res.status(400).send('Wrong password');
@@ -63,7 +63,7 @@ export async function login(req: Request, res: Response) {
     }
 
     const token = jwt.sign(
-      { email: userExists.email, id: userExists.id },
+      { email: user.email, id: user.id },
       process.env.TOKEN_SECRET,
       {
         expiresIn: '1h'
