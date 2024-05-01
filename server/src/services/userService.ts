@@ -11,16 +11,3 @@ export function getUserById(id: number): Promise<User | null> {
 export function getUserByEmail(email: string): Promise<User | null> {
   return User.findOne({ where: { email } });
 }
-
-// export const getAllUsers= (userData: IUser) => {
-//   const newUser: IUser = new User(userData);
-//   return newUser.save();
-// };
-
-// export const updateUser = (id: string, userData: IUser) => {
-//   return User.findByIdAndUpdate(id, userData, { new: true });
-// };
-
-// export const deleteUser = (id: string) => {
-//   return User.findByIdAndDelete(id);
-// };

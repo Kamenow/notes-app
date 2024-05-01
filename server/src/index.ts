@@ -17,9 +17,6 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.get('/', (_req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
 app.use(bodyParser.json());
 app.use('/users', UserRoutes);
 app.use('/notes', NotesRoutes);

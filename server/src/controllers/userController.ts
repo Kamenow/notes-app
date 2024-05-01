@@ -22,22 +22,3 @@ export async function getUserById(req: Request, res: Response) {
 
   res.json(user);
 }
-
-// export const getAllUsers  = (req: Request, res: Response) => {
-//   const { body } = req;
-//   const newUser = userService.createUser(body);
-//   res.json(newUser);
-// };
-
-// export const updateUser = (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const { body } = req;
-//   const updatedUser = userService.updateUser(id, body);
-//   res.json(updatedUser);
-// };
-
-// export const deleteUser = (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   userService.deleteUser(id);
-//   res.json({ message: 'User deleted successfully' });
-// };
