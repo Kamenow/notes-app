@@ -1,7 +1,6 @@
 import { Button, Input, Typography } from '@mui/material';
 import { CSSProperties, useState } from 'react';
-import { CreateNote, Note } from '../types/Note';
-import { getUserFromToken } from '../helpers/tokenHelpers';
+import { CreateNote } from '../types/Note';
 
 const formStyle: CSSProperties = {
   padding: '1rem',
