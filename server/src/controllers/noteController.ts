@@ -1,12 +1,16 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import * as noteService from '../services/noteService';
-import User from '../models/User';
-import { CustomRequest } from '../interfaces/Request';
+import { AuthorizedRequest } from '../interfaces/Request';
 
-export async function createNote(req: Request, res: Response) {
+export async function createNote(req: AuthorizedRequest, res: Response) {
+  if (!req?.user?.id) {
+    return res.status(401).send({ message: 'unathorized' });
+  }
+
   try {
     const note = await noteService.createNote({
-      ...req.body
+      ...req.body,
+      userId: req?.user?.id
     });
     res.status(200).json(note);
   } catch (error) {
@@ -14,9 +18,13 @@ export async function createNote(req: Request, res: Response) {
   }
 }
 
-export async function getNoteById(req: Request<{ id: string }>, res: Response) {
+export async function getNoteById(req: AuthorizedRequest, res: Response) {
   try {
     const note = await noteService.getNoteById(req.params.id);
+
+    if (req?.user?.id !== note?.userId) {
+      return res.status(401).send({ message: 'unathorized' });
+    }
 
     if (!note) {
       return res.status(400).send({ message: "note doesn't exist" });
@@ -28,16 +36,19 @@ export async function getNoteById(req: Request<{ id: string }>, res: Response) {
   }
 }
 
-export async function deleteNoteById(
-  req: Request<{ id: string }>,
-  res: Response
-) {
+export async function deleteNoteById(req: AuthorizedRequest, res: Response) {
   try {
-    const itemsDeleted = await noteService.deleteNoteById(req.params.id);
+    const note = await noteService.getNoteById(req.params.id);
 
-    if (itemsDeleted < 1) {
-      return res.status(400).send({ message: 'note not found' });
+    if (req?.user?.id != note?.userId) {
+      return res.status(401).send({ message: 'unathorized' });
     }
+
+    if (!note) {
+      return res.status(404).send({ message: 'note not found' });
+    }
+
+    note.destroy();
 
     res.status(200).send({ message: 'deleted successfully' });
   } catch (error) {
@@ -45,11 +56,11 @@ export async function deleteNoteById(
   }
 }
 
-export async function getAllNotesOfUser(
-  // TODO: add type in types file
-  req: Request<{ id: string }, {}, { user: User }>,
-  res: Response
-) {
+export async function getAllNotesOfUser(req: AuthorizedRequest, res: Response) {
+  if (req?.user?.id.toString() !== req.params.id) {
+    return res.status(401).send({ message: 'unathorized' });
+  }
+
   try {
     const notes = await noteService.getAllNotesOfUser(req.params.id);
 
@@ -59,17 +70,17 @@ export async function getAllNotesOfUser(
   }
 }
 
-export async function updateNoteById(
-  // TODO: add type in types file
-  req: Request<{ id: string }, {}, { title: string; content: string }>,
-  res: Response
-) {
+export async function updateNoteById(req: AuthorizedRequest, res: Response) {
   try {
     const note = await noteService.updateNoteById(
       req.params.id,
       req.body.title,
       req.body.content
     );
+
+    if (req?.user?.id != note.id) {
+      return res.status(401).send({ message: 'unathorized' });
+    }
 
     res.status(200).send(note);
   } catch (error) {

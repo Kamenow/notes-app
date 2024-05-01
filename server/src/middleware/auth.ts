@@ -1,15 +1,18 @@
-import { NextFunction, RequestHandler, Response } from 'express';
-import jwt, { Secret } from 'jsonwebtoken';
-import { CustomRequest } from '../interfaces/Request';
+import { NextFunction, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { AuthorizedRequest } from '../interfaces/Request';
 import User from '../models/User';
 
 export const verifyToken = (
-  // TODO: fix typing
-  req: CustomRequest & Request & any,
+  req: AuthorizedRequest,
   res: Response,
   next: NextFunction
 ) => {
   const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!process.env.TOKEN_SECRET) {
+    throw new Error('No jwt secret provided');
+  }
 
   if (!token)
     return res
@@ -17,11 +20,8 @@ export const verifyToken = (
       .send({ message: 'Access denied. No token provided.' });
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as unknown as Secret
-    );
-    req.user = decoded as unknown as User;
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET) as User;
+    req.user = decoded as User;
     next();
   } catch (error) {
     res.status(400).send({ message: 'Invalid token.' });
