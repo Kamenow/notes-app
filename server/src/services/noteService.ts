@@ -46,6 +46,5 @@ export async function updateNoteById(
     note.content = content;
   }
 
-  await note.save();
   return note;
 }

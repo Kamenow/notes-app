@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../Contexts/AuthContext';
+import { useContext, useEffect } from 'react';
 import axios from 'axios';
 import {
   getCurrentUserToken,
@@ -10,10 +9,10 @@ import {
 } from '../helpers/tokenHelpers';
 import { LoginFormDataType, RegisterFormDataType } from '../types/formData';
 import { URL } from '../services/apiUrl';
+import { AuthContext } from '../Contexts/AuthContext';
 
 export default function useAuth() {
-  const contextUser = useContext(AuthContext);
-  const [user, setUser] = useState(contextUser);
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
     const currentToken = getCurrentUserToken();
@@ -23,13 +22,10 @@ export default function useAuth() {
         removeToken();
       } else {
         const extractedUser = getUserFromToken(currentToken);
-        setUser(extractedUser);
-
-        contextUser.token = extractedUser.token;
-        contextUser.email = extractedUser.email;
+        authContext.setUser(extractedUser);
       }
     }
-  }, [contextUser.email, contextUser.token, user.email, user.token]);
+  }, [authContext.user.email, authContext.user.token, authContext.user.id]);
 
   async function login(loginData: LoginFormDataType) {
     const res = await axios.post(`${URL}/auth/login`, loginData);
@@ -37,11 +33,7 @@ export default function useAuth() {
 
     setToken(token);
     const extractedUser = getUserFromToken(token);
-    setUser(extractedUser);
-
-    contextUser.token = extractedUser.token;
-    contextUser.email = extractedUser.email;
-    contextUser.id = extractedUser.id;
+    authContext.setUser(extractedUser);
   }
 
   async function register(registerData: RegisterFormDataType) {
@@ -50,21 +42,14 @@ export default function useAuth() {
 
     setToken(token);
     const extractedUser = getUserFromToken(token);
-    setUser(extractedUser);
-
-    contextUser.token = extractedUser.token;
-    contextUser.email = extractedUser.email;
-    contextUser.id = extractedUser.id;
+    authContext.setUser(extractedUser);
   }
 
   function logout() {
     removeToken();
 
-    contextUser.token = null;
-    contextUser.email = null;
-    contextUser.id = null;
-    setUser({ email: null, id: null, token: null });
+    authContext.setUser({ email: null, id: null, token: null });
   }
 
-  return { user, login, register, logout };
+  return { user: authContext.user, login, register, logout };
 }

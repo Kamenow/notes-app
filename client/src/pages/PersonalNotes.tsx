@@ -25,10 +25,7 @@ function PersonalNotes() {
       <>
         <CreateNoteForm
           createNote={(createNoteData) => {
-            createNote({
-              ...createNoteData,
-              userId: user.id
-            });
+            createNote(createNoteData);
           }}
         />
         {notes.map((note: Note) => (

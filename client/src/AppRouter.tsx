@@ -4,6 +4,7 @@ import PersonalNotes from './pages/PersonalNotes';
 import Auth from './pages/Auth';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ErrorPage from './pages/ErrorPage';
 
 export default function AppRouter(): ReactElement {
   return (
@@ -32,8 +33,7 @@ export default function AppRouter(): ReactElement {
               </ProtectedRoute>
             }
           />
-          {/* TODO: add error page */}
-          {/* <Route path="*" element={<ErrorPage />} /> */}
+          <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

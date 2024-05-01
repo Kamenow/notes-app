@@ -20,10 +20,8 @@ const defaultNoteData = {
   content: ''
 };
 
-function CreateNoteForm(props: {
-  createNote: (noteData: Partial<CreateNote>) => void;
-}) {
-  const [noteData, setNoteData] = useState<Partial<Note>>(defaultNoteData);
+function CreateNoteForm(props: { createNote: (noteData: CreateNote) => void }) {
+  const [noteData, setNoteData] = useState<CreateNote>(defaultNoteData);
 
   function handleOnclick() {
     props.createNote(noteData);

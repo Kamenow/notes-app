@@ -7,6 +7,5 @@ export type Note = {
 
 export type CreateNote = {
   content: string;
-  userId: string;
   title: string;
 };

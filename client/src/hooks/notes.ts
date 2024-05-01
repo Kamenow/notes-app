@@ -35,7 +35,7 @@ export default function useNotes(userId: string) {
     }
   }
 
-  async function updateNoteById(noteId: string, updateNoteData: Partial<Note>) {
+  async function updateNoteById(noteId: string, updateNoteData: CreateNote) {
     await notesService.updateNoteById(noteId, updateNoteData);
 
     const updatedNotes = notes.map((note) => {

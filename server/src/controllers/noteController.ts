@@ -78,9 +78,11 @@ export async function updateNoteById(req: AuthorizedRequest, res: Response) {
       req.body.content
     );
 
-    if (req?.user?.id != note.id) {
+    if (req?.user?.id !== note?.userId) {
       return res.status(401).send({ message: 'unathorized' });
     }
+
+    await note.save();
 
     res.status(200).send(note);
   } catch (error) {

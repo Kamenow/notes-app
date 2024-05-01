@@ -1,14 +1,22 @@
-import axios from 'axios';
 import { LoginFormDataType, RegisterFormDataType } from '../types/formData';
-import { URL } from './apiUrl';
+import { HttpMethods, URL } from './apiUrl';
+import { apiCall } from '../helpers/apiCall';
 
 class AuthService {
   login(loginData: LoginFormDataType) {
-    return axios.post(`${URL}/auth/login`, loginData);
+    return apiCall({
+      url: `${URL}/auth/login`,
+      data: loginData,
+      method: HttpMethods.post
+    });
   }
 
   register(registerData: RegisterFormDataType) {
-    return axios.post(`${URL}/auth/register`, registerData);
+    return apiCall({
+      url: `${URL}/auth/register`,
+      data: registerData,
+      method: HttpMethods.post
+    });
   }
 }
 

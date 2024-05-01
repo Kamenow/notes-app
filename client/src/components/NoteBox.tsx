@@ -1,10 +1,10 @@
 import { Box, Button, Input } from '@mui/material';
 import { useState } from 'react';
-import { Note } from '../types/Note';
+import { CreateNote, Note } from '../types/Note';
 
 function NoteBox(props: {
   note: Note;
-  onSave: (noteData: Partial<Note>) => void;
+  onSave: (noteData: CreateNote) => void;
   onDelete: () => void;
 }) {
   const [note, setNote] = useState<Note>(props.note);
