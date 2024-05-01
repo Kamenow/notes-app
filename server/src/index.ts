@@ -4,6 +4,7 @@ import sequelize from './db/db';
 import UserRoutes from './routes/userRoutes';
 import AuthRoutes from './routes/authRoutes';
 import NotesRoutes from './routes/notesRoute';
+import TestRoutes from './routes/testRoute';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { SyncDBModels } from './helpers/db';
@@ -18,6 +19,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/test', TestRoutes);
 app.use('/users', UserRoutes);
 app.use('/notes', NotesRoutes);
 app.use('/auth', AuthRoutes);
