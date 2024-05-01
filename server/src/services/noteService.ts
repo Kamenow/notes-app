@@ -27,3 +27,25 @@ export function getAllNotesOfUser(userId: string): Promise<Note[]> {
     }
   });
 }
+
+export async function updateNoteById(
+  noteId: string,
+  title: string,
+  content: string
+): Promise<Note> {
+  const note = await getNoteById(noteId);
+
+  if (!note) {
+    throw { message: 'Note not found' };
+  }
+
+  if (title !== undefined) {
+    note.title = title;
+  }
+  if (content !== undefined) {
+    note.content = content;
+  }
+
+  await note.save();
+  return note;
+}

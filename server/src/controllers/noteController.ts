@@ -42,13 +42,32 @@ export async function deleteNoteById(
 }
 
 export async function getAllNotesOfUser(
-  req: Request<{ id: string }>,
+  // TODO: add type in types file
+  req: Request<{ id: string }, {}, { user: User }>,
   res: Response
 ) {
   try {
     const notes = await noteService.getAllNotesOfUser(req.params.id);
 
     res.status(200).send(notes);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+export async function updateNoteById(
+  // TODO: add type in types file
+  req: Request<{ id: string }, {}, { title: string; content: string }>,
+  res: Response
+) {
+  try {
+    const note = await noteService.updateNoteById(
+      req.params.id,
+      req.body.title,
+      req.body.content
+    );
+
+    res.status(200).send(note);
   } catch (error) {
     res.status(500).send(error);
   }

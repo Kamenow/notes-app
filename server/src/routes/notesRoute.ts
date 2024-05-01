@@ -7,5 +7,6 @@ router.post('/create-note', noteController.createNote);
 router.delete('/:id', noteController.deleteNoteById);
 router.get('/:id', noteController.getNoteById);
 router.get('/user/:id', noteController.getAllNotesOfUser);
+router.patch('/:id', verifyToken, noteController.updateNoteById);
 
 export default router;
