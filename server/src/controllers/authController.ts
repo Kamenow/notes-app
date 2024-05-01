@@ -12,11 +12,11 @@ export async function register(req: Request, res: Response) {
     const existingUser = await userService.getUserByEmail(email);
 
     if (existingUser) {
-      return res.status(400).send('User already exists');
+      return res.status(400).send({ message: 'User already exists' });
     }
 
     if (password !== rePassword) {
-      return res.status(400).send("Passwords don't match");
+      return res.status(400).send({ message: "Passwords don't match" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,7 +25,7 @@ export async function register(req: Request, res: Response) {
     await user.save();
 
     if (!process.env.TOKEN_SECRET) {
-      return res.status(500).send('Something went wrong');
+      return res.status(500).send({ message: 'Something went wrong' });
     }
 
     const token = jwt.sign(
@@ -49,13 +49,17 @@ export async function login(req: Request, res: Response) {
     const user = await userService.getUserByEmail(email);
 
     if (user === null) {
-      return res.status(400).send("User doesn't exist");
+      return res.status(400).send({
+        message: 'Wrong Credentials'
+      });
     }
 
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) {
-      return res.status(400).send('Wrong password');
+      return res.status(400).send({
+        message: 'Wrong Credentials'
+      });
     }
 
     if (!process.env.TOKEN_SECRET) {

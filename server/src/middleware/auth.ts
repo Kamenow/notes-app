@@ -4,7 +4,7 @@ import { CustomRequest } from '../interfaces/Request';
 import User from '../models/User';
 
 export const verifyToken = (
-  // TODO: fix typeing
+  // TODO: fix typing
   req: CustomRequest & Request & any,
   res: Response,
   next: NextFunction

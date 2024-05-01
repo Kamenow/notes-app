@@ -1,6 +1,9 @@
 import { ReactElement } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import Test from './pages/Test';
+import PersonalNotes from './pages/PersonalNotes';
+import Auth from './pages/Auth';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 export default function AppRouter(): ReactElement {
   return (
@@ -13,8 +16,22 @@ export default function AppRouter(): ReactElement {
             </PageTemplate>
           }
         >
-          <Route index element={<div>test</div>} />
-          <Route path='test' element={<Test />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute authenticated={false}>
+                <Auth />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/notes'
+            element={
+              <ProtectedRoute authenticated={true}>
+                <PersonalNotes />
+              </ProtectedRoute>
+            }
+          />
           {/* TODO: add error page */}
           {/* <Route path="*" element={<ErrorPage />} /> */}
         </Route>
@@ -31,7 +48,7 @@ export default function AppRouter(): ReactElement {
 function PageTemplate(props: { children: ReactElement }): ReactElement {
   return (
     <>
-      <nav></nav>
+      <Navbar />
       {props.children}
       <footer></footer>
     </>
