@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import { SyncDBModels } from './helpers/db';
 import Note from './models/Note';
 import User from './models/User';
-import { Sequelize } from 'sequelize';
+import { errorHandler } from './middleware/errorHandling';
 
 dotenv.config();
 
@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 app.use('/users', UserRoutes);
 app.use('/notes', NotesRoutes);
 app.use('/auth', AuthRoutes);
+app.use(errorHandler);
 
 app.listen(port, async () => {
   try {
