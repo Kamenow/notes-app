@@ -22,6 +22,7 @@ I made a `postman` with example requests:
 
 i've created some environment variables:
 ![image](https://github.com/Kamenow/notes-app/assets/71972811/337604a0-a423-413f-b670-a5da22da7a0f)
+
 On login you will receive a JWT token (keep in mind only it lasts an hour) that you should paste in the `token` environment variable. It's needed in order to access the `notes` routes
 The `url` field should be changed to the `server` endpoint
 
