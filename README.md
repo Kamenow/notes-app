@@ -49,6 +49,6 @@ Models for the `User` and `Notes` are defined in `server/src/models` folder
 
 I only use `controllers` and `services`, and don't use a `repository` because `sequelizer` simplifies queries enough in my opinion.
 
-If there is any issue with running the app feel free to message/call me
+If there is any issue with running the app feel free to message/call me. 
 Didn't have time for tests.
 I wish I added an object mapper middleware but was afraid it was gonna cause issues and slow me down.
