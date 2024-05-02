@@ -10,11 +10,22 @@ export async function register(req: Request, res: Response) {
   const existingUser = await userService.getUserByEmail(email);
 
   if (existingUser) {
-    return res.status(400).send({ message: 'User already exists' });
+    return res.status(400).send({
+      data: {
+        email: 'Email already registered'
+      },
+      message: 'Wrong Credentials'
+    });
   }
 
   if (password !== rePassword) {
-    return res.status(400).send({ message: "Passwords don't match" });
+    return res.status(400).send({
+      data: {
+        password: "passwords don't match",
+        rePassword: "passwords don't match"
+      },
+      message: 'Wrong Credentials'
+    });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,6 +55,9 @@ export async function login(req: Request, res: Response) {
 
   if (user === null) {
     return res.status(400).send({
+      data: {
+        email: "Email doesn't exist"
+      },
       message: 'Wrong Credentials'
     });
   }
@@ -52,6 +66,10 @@ export async function login(req: Request, res: Response) {
 
   if (!passwordsMatch) {
     return res.status(400).send({
+      data: {
+        password: "passwords don't match",
+        rePassword: "passwords don't match"
+      },
       message: 'Wrong Credentials'
     });
   }

@@ -1,104 +1,102 @@
+import { FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
-import { isEmailValid, isPasswordValid } from '../../helpers/validation';
-import { FormEvent, useMemo, useState } from 'react';
-import { CustomInput } from '../common/CustomInput';
-import { RegisterFormDataType, RegisterFormErrors } from '../../types/formData';
-import useAuth from '../../hooks/auth';
 import { formContainerStyle } from './style';
+import useFormField from '../../hooks/formField';
+import { isEmailValid, isPasswordValid } from '../../helpers/validation';
+import CustomInput from '../common/CustomInput';
+import useAuth from '../../hooks/auth';
+import { setErrors } from '../../helpers/errorHandling';
 
 function RegisterForm(props: { switchForm: () => void }) {
+  const {
+    error: emailError,
+    handleBlur: emailHandleBlur,
+    handleChange: emailHandleChange,
+    value: EmailValue,
+    setError: setEmailError
+  } = useFormField('', isEmailValid);
+
+  const {
+    error: passworError,
+    handleBlur: passwordHandleBlur,
+    handleChange: passwordHandleChange,
+    value: passwordValue,
+    setError: setPasswordError
+  } = useFormField('', isPasswordValid);
+
+  const {
+    error: rePassworError,
+    handleBlur: rePasswordHandleBlur,
+    handleChange: rePasswordHandleChange,
+    value: rePasswordValue,
+    setError: setRePasswordError
+  } = useFormField('', isPasswordValid);
+
   const { register } = useAuth();
-  const [formData, setFormData] = useState<RegisterFormDataType>({
-    email: '',
-    password: '',
-    rePassword: ''
-  });
-  const [formError, setFormError] = useState<RegisterFormErrors>({
-    email: false,
-    password: false,
-    rePassword: false
-  });
-
-  const hasError = useMemo(() => {
-    return Object.values(formError).some((error) => error);
-  }, [formError.email, formError.password, formError.rePassword]);
-
-  function handleChange(fieldName: string, value: string) {
-    setFormData({
-      ...formData,
-      [fieldName]: value
-    });
-  }
-
-  function handleValidation(fieldName: string, isValid: boolean): void {
-    setFormError({ ...formError, [fieldName]: !isValid });
-  }
+  const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     try {
-      await register(formData);
-    } catch (error) {
-      setFormError({ email: true, password: true, rePassword: true });
+      await register({
+        email: EmailValue,
+        password: passwordValue,
+        rePassword: rePasswordValue
+      });
+      navigate('/notes');
+    } catch (error: any) {
+      setErrors(error, [
+        {
+          fieldName: 'email',
+          setFieldError: setEmailError
+        },
+        {
+          fieldName: 'password',
+          setFieldError: setPasswordError
+        },
+        {
+          fieldName: 'rePassword',
+          setFieldError: setRePasswordError
+        }
+      ]);
     }
   }
 
   return (
     <form style={formContainerStyle} onSubmit={handleSubmit}>
       <Typography>Register</Typography>
-      {(formError.email || formError.password) && (
-        <Typography color='red' fontSize='0.6rem'>
-          Wrong Credentials
-        </Typography>
-      )}
 
       <CustomInput
-        label='Email'
-        placeholder='Email'
-        name='email'
-        validateField={handleValidation.bind(
-          undefined,
-          'email',
-          isEmailValid(formData.email)
-        )}
-        hasErrors={formError.email}
-        onChange={handleChange.bind(undefined, 'email')}
-        value={formData.email}
+        error={emailError}
+        handleBlur={emailHandleBlur}
+        handleChange={emailHandleChange}
+        value={EmailValue}
+        required={true}
         type='email'
-        required
+        label='email'
       />
       <CustomInput
-        label='Password'
-        name='password'
-        placeholder='Password'
-        value={formData.password}
-        hasErrors={formError.password}
-        onChange={handleChange.bind(undefined, 'password')}
-        validateField={handleValidation.bind(
-          undefined,
-          'password',
-          isPasswordValid(formData.password)
-        )}
+        error={passworError}
+        handleBlur={passwordHandleBlur}
+        handleChange={passwordHandleChange}
+        value={passwordValue}
+        required={true}
         type='password'
-        required
+        label='password'
       />
       <CustomInput
+        error={rePassworError}
+        handleBlur={rePasswordHandleBlur}
+        handleChange={rePasswordHandleChange}
+        value={rePasswordValue}
+        required={true}
+        type='password'
         label='rePassword'
-        name='rePassword'
-        placeholder='rePassword'
-        value={formData.rePassword}
-        hasErrors={formError.rePassword}
-        onChange={handleChange.bind(undefined, 'rePassword')}
-        validateField={handleValidation.bind(
-          undefined,
-          'rePassword',
-          isPasswordValid(formData.rePassword)
-        )}
-        type='password'
-        required
       />
 
-      <Button disabled={hasError} type='submit'>
+      <Button disabled={false} type='submit'>
         Submit
       </Button>
 

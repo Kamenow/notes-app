@@ -1,90 +1,77 @@
-import { Button, Typography } from '@mui/material';
-import { isEmailValid, isPasswordValid } from '../../helpers/validation';
-import { FormEvent, useMemo, useState } from 'react';
-import { CustomInput } from '../common/CustomInput';
-import { LoginFormDataType, LoginFormErrors } from '../../types/formData';
-import useAuth from '../../hooks/auth';
-import { formContainerStyle } from './style';
+import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Typography } from '@mui/material';
+import { formContainerStyle } from './style';
+import useFormField from '../../hooks/formField';
+import { isEmailValid, isPasswordValid } from '../../helpers/validation';
+import useAuth from '../../hooks/auth';
+import CustomInput from '../common/CustomInput';
+import { setErrors } from '../../helpers/errorHandling';
 
 function LoginForm(props: { switchForm: () => void }) {
+  const {
+    error: emailError,
+    handleBlur: emailHandleBlur,
+    handleChange: emailHandleChange,
+    value: EmailValue,
+    setError: setEmailError
+  } = useFormField('', isEmailValid);
+
+  const {
+    error: passworError,
+    handleBlur: passwordHandleBlur,
+    handleChange: passwordHandleChange,
+    value: passwordValue,
+    setError: setPasswordError
+  } = useFormField('', isPasswordValid);
+
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<LoginFormDataType>({
-    email: '',
-    password: ''
-  });
-  const [formError, setFormError] = useState<LoginFormErrors>({
-    email: false,
-    password: false
-  });
-
-  const hasError = useMemo(() => {
-    return Object.values(formError).some((error) => error);
-  }, [formError.email, formError.password]);
-
-  function handleChange(fieldName: string, value: string) {
-    setFormData({
-      ...formData,
-      [fieldName]: value
-    });
-  }
-
-  function handleValidation(fieldName: string, isValid: boolean): void {
-    setFormError({ ...formError, [fieldName]: !isValid });
-  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     try {
-      await login(formData);
+      await login({ email: EmailValue, password: passwordValue });
       navigate('/notes');
-    } catch (error) {
-      setFormError({ email: true, password: true });
+    } catch (error: any) {
+      setErrors(error, [
+        {
+          fieldName: 'email',
+          setFieldError: setEmailError
+        },
+        {
+          fieldName: 'password',
+          setFieldError: setPasswordError
+        }
+      ]);
     }
   }
 
   return (
     <form style={formContainerStyle} onSubmit={handleSubmit}>
       <Typography>Login</Typography>
-      {(formError.email || formError.password) && (
-        <Typography color='red' fontSize='0.6rem'>
-          Wrong Credentials
-        </Typography>
-      )}
 
       <CustomInput
-        label='Email'
-        placeholder='Email'
-        name='email'
-        validateField={handleValidation.bind(
-          undefined,
-          'email',
-          isEmailValid(formData.email)
-        )}
-        hasErrors={formError.email}
-        onChange={handleChange.bind(undefined, 'email')}
-        value={formData.email}
+        error={emailError}
+        handleBlur={emailHandleBlur}
+        handleChange={emailHandleChange}
+        value={EmailValue}
+        required={true}
         type='email'
-        required
+        label='email'
       />
       <CustomInput
-        label='Password'
-        name='password'
-        placeholder='Password'
-        value={formData.password}
-        hasErrors={formError.password}
-        onChange={handleChange.bind(undefined, 'password')}
-        validateField={handleValidation.bind(
-          undefined,
-          'password',
-          isPasswordValid(formData.password)
-        )}
+        error={passworError}
+        handleBlur={passwordHandleBlur}
+        handleChange={passwordHandleChange}
+        value={passwordValue}
+        required={true}
         type='password'
-        required
+        label='password'
       />
 
-      <Button disabled={hasError} type='submit'>
+      <Button disabled={false} type='submit'>
         Submit
       </Button>
 

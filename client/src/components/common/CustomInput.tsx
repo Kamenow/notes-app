@@ -2,76 +2,38 @@ import {
   FormControl,
   FormControlProps,
   Input,
-  InputLabel
+  InputLabel,
+  Typography
 } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
 
-type CustomInputProps = {
-  defaultValue?: string;
+type TestInputType = {
   value: string;
+  error: string;
   label: string;
-  name: string;
-  hasErrors: boolean;
   type?: string;
-  placeholder: string;
-  validateField: () => void;
-  onChange: (value: string) => void | Promise<void>;
+  required?: boolean;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBlur: () => void;
 };
 
-export function CustomInput(
-  props: CustomInputProps & Omit<FormControlProps, 'onChange'>
-) {
-  const [isTouched, setIsTouched] = useState<boolean>(false);
-  const {
-    defaultValue,
-    label,
-    type,
-    hasErrors,
-    value,
-    placeholder,
-    onChange,
-    validateField,
-    name,
-    ...rest
-  } = props;
-
-  useEffect(() => {
-    if (value) {
-      setIsTouched(true);
-      validateField();
-    }
-  }, [props.value]);
-
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    if (isTouched) {
-      validateField();
-    }
-
-    return onChange(e.target.value);
-  }
-
-  function handleBlur() {
-    if (isTouched) {
-      validateField();
-    }
-
-    setIsTouched(true);
-  }
-
+function CustomInput(props: TestInputType) {
   return (
-    <FormControl defaultValue={defaultValue} {...rest}>
-      <InputLabel sx={{ color: hasErrors ? 'red !important' : 'unset' }}>
-        {label}
+    <FormControl required={props.required}>
+      <InputLabel sx={{ color: props.error ? 'red !important' : 'unset' }}>
+        {props.label}
       </InputLabel>
       <Input
-        placeholder={placeholder}
-        value={value}
-        name=''
-        type={type ? type : 'text'}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={hasErrors}
+        value={props.value}
+        onChange={props.handleChange}
+        onBlur={props.handleBlur}
+        error={props.error.length > 0}
+        type={props.type ?? 'text'}
       />
+      <Typography color='red' fontSize='15px'>
+        {props.error}
+      </Typography>
     </FormControl>
   );
 }
+
+export default CustomInput;
