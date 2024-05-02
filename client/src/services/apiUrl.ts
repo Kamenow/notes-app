@@ -1,4 +1,5 @@
-export const URL = 'http://localhost:3000';
+const PORT = 3000;
+export const URL = `http://localhost:${PORT}`;
 
 export enum HttpMethods {
   get = 'get',
