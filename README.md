@@ -44,7 +44,7 @@ I left the token and port because they're usually the same, but feel free to cha
 
 The starting location of the app is in `server/src/index.ts` where we setup middlewares, routes and connect to the database.
 
-All routes are in `server/src/routes`, mostly all of them just point to the controllers, except the notes route which has an auth middleware.
+All routes are in `server/src/routes`, mostly all of them just point to the controllers, except the `notes` route which has an auth middleware.
 Models for the `User` and `Notes` are defined in `server/src/models` folder
 
 I only use `controllers` and `services`, and don't use a `repository` because `sequelizer` simplifies queries enough in my opinion.
