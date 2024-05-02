@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react';
-import axios from 'axios';
 import {
   getCurrentUserToken,
   getUserFromToken,
@@ -8,8 +7,8 @@ import {
   tokenExpired
 } from '../helpers/tokenHelpers';
 import { LoginFormDataType, RegisterFormDataType } from '../types/formData';
-import { URL } from '../services/apiUrl';
 import { AuthContext } from '../Contexts/AuthContext';
+import authService from '../services/authService';
 
 export default function useAuth() {
   const authContext = useContext(AuthContext);
@@ -28,7 +27,7 @@ export default function useAuth() {
   }, [authContext.user.email, authContext.user.token, authContext.user.id]);
 
   async function login(loginData: LoginFormDataType) {
-    const res = await axios.post(`${URL}/auth/login`, loginData);
+    const res = await authService.login(loginData);
     const token = res.data;
 
     setToken(token);
@@ -37,7 +36,7 @@ export default function useAuth() {
   }
 
   async function register(registerData: RegisterFormDataType) {
-    const res = await axios.post(`${URL}/auth/register`, registerData);
+    const res = await authService.register(registerData);
     const token = res.data;
 
     setToken(token);
@@ -47,7 +46,6 @@ export default function useAuth() {
 
   function logout() {
     removeToken();
-
     authContext.setUser({ email: null, id: null, token: null });
   }
 

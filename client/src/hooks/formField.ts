@@ -3,19 +3,19 @@ import { useEffect, useState } from 'react';
 type ValidatorFunction = (value: string) => string;
 // type ValidatorFunction = (value: string) => boolean;
 
-interface FieldState {
+type FormFieldProps = {
   value: string;
   error: string;
   isTouched: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: () => void;
   setError: (error: string) => void;
-}
+};
 
 const useFormField = (
   initialValue: string,
   validator: ValidatorFunction
-): FieldState => {
+): FormFieldProps => {
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState('');
   const [isTouched, setIsTouched] = useState(false);

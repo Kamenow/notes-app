@@ -2,13 +2,13 @@ import { ReactElement, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUserToken } from '../../helpers/tokenHelpers';
 
-interface ProtectedRouteInterface {
+type ProtectedRouteProps = {
   authenticated?: boolean | null;
   children?: ReactElement;
-}
+};
 
 function ProtectedRoute(
-  props: ProtectedRouteInterface = {
+  props: ProtectedRouteProps = {
     authenticated: null
   }
 ) {
