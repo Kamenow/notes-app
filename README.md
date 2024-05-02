@@ -5,6 +5,8 @@ I put everything in one repository for convenience's sake
 ### Frontend
 
 run `npm i` in `client` folder
+`npm run dev` to run the project
+
 In `client/src/services/apiUrl.ts` there is the `PORT` and `URL` for the server. Feel free to change it if necessary.
 
 All requests to backend are encaplusated in `client/src/services`
@@ -27,6 +29,7 @@ On login you will receive a JWT token (keep in mind only it lasts an hour) it sh
 The `url` field should be changed to the `server` endpoint
 
 run `npm i` in `server` folder
+`npm run dev` to run the project
 
 for setup in the backend we have a `.env` file with database info:
 
