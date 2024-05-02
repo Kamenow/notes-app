@@ -1,9 +1,18 @@
-import { Container } from '@mui/material';
+import { Container, SxProps } from '@mui/material';
 import useAuth from '../hooks/auth';
 import useNotes from '../hooks/notes';
 import { Note } from '../types/Note';
 import NoteBox from '../components/NoteBox';
 import CreateNoteForm from '../components/CreateNoteForm';
+
+const personalNotesStyle: SxProps = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'stretch',
+  gap: '25px',
+  flexWrap: 'wrap',
+  padding: '1rem'
+};
 
 function PersonalNotes() {
   const { user } = useAuth();
@@ -12,16 +21,7 @@ function PersonalNotes() {
   );
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        gap: '25px',
-        flexWrap: 'wrap',
-        padding: '1rem'
-      }}
-    >
+    <Container sx={personalNotesStyle}>
       <>
         <CreateNoteForm
           createNote={(createNoteData) => {
