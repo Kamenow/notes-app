@@ -38,6 +38,7 @@ DB_USER=
 DB_PASSWORD=
 DB_HOST=
 ```
+Tables should be created automatically. But you need to setup the database manually.
 
 I left the token and port because they're usually the same, but feel free to change them if needed.
 
