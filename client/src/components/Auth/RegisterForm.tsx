@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import { formContainerStyle } from './style';
@@ -35,6 +35,14 @@ function RegisterForm(props: { switchForm: () => void }) {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  const hasError = useMemo(
+    () =>
+      emailError.length > 0 ||
+      passworError.length > 0 ||
+      rePassworError.length > 0,
+    [emailError, passworError, rePassworError]
+  );
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,7 +104,7 @@ function RegisterForm(props: { switchForm: () => void }) {
         label='rePassword'
       />
 
-      <Button disabled={false} type='submit'>
+      <Button disabled={hasError} type='submit'>
         Submit
       </Button>
 
